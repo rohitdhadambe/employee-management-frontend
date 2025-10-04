@@ -74,3 +74,55 @@ def get_all_employees() -> List[Employee]:
 # Call this once to ensure the database file is created and the table exists
 initialize_database() 
 print(f"Database initialized: {DATABASE_NAME}")
+
+def create_employee(name: str, email: str, position: str) -> Optional[Employee]:
+    conn = get_db_connection()
+    try:
+        if conn.execute("SELECT id FROM employees WHERE email = ?", (email,)).fetchone():
+            return None
+
+        cursor = conn.cursor()
+        cursor.execute(
+            "INSERT INTO employees (name, email, position) VALUES (?, ?, ?)",
+            (name, email, position)
+        )
+        conn.commit()
+        new_id = cursor.lastrowid
+        return Employee(id=new_id, name=name, email=email, position=position)
+    except Exception as e:
+        print(f"Error creating employee: {e}")
+        return None
+    finally:
+        conn.close()
+
+def update_employee(employee_id: int, name: str, email: str, position: str) -> Optional[Employee]:
+    conn = get_db_connection()
+    try:
+        if not conn.execute("SELECT id FROM employees WHERE id = ?", (employee_id,)).fetchone():
+            return None
+
+        cursor = conn.cursor()
+        cursor.execute(
+            "UPDATE employees SET name = ?, email = ?, position = ? WHERE id = ?",
+            (name, email, position, employee_id)
+        )
+        conn.commit()
+        return Employee(id=employee_id, name=name, email=email, position=position)
+    except Exception as e:
+        print(f"Error updating employee: {e}")
+        return None
+    finally:
+        conn.close()
+
+def delete_employee(employee_id: int) -> bool:
+    conn = get_db_connection()
+    try:
+        cursor = conn.cursor()
+        cursor.execute("DELETE FROM employees WHERE id = ?", (employee_id,))
+        conn.commit()
+        return cursor.rowcount > 0
+    except Exception as e:
+        print(f"Error deleting employee: {e}")
+        return False
+    finally:
+        conn.close()
