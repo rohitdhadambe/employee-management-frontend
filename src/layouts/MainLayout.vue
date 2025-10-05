@@ -1,6 +1,5 @@
 <template>
   <q-layout view="hHh lpR fFf">
-    <!-- Header -->
     <q-header elevated class="bg-white text-grey-9">
       <q-toolbar class="q-px-lg">
         <q-btn 
@@ -48,8 +47,8 @@
             <template v-slot:label>
               <div class="row items-center no-wrap">
                 <q-avatar size="32px" color="blue-grey-2" text-color="blue-grey-9" class="q-mr-sm">
-  <q-icon name="person_outline" />
-</q-avatar>
+                  <q-icon name="person_outline" />
+                </q-avatar>
 
                 <div class="q-ml-sm text-left gt-sm">
                   <div class="text-weight-medium text-body2">Rohit Dhadambe</div>
@@ -87,7 +86,6 @@
       </q-toolbar>
     </q-header>
 
-    <!-- Drawer -->
     <q-drawer 
       v-model="drawerOpen" 
       show-if-above
@@ -97,7 +95,6 @@
       class="bg-grey-1"
     >
       <q-scroll-area class="fit">
-        <!-- Navigation -->
         <q-list padding class="q-pa-md">
           <q-item-label header class="text-grey-8 text-weight-bold q-px-sm q-mb-sm">
             MAIN MENU
@@ -196,7 +193,6 @@
 
         <q-separator />
 
-        <!-- Footer -->
         <div class="q-pa-md text-center">
           <div class="text-caption text-grey-6">Version 1.0.0</div>
           <div class="text-caption text-grey-5">© 2025 rohitdhadambe</div>
@@ -204,7 +200,6 @@
       </q-scroll-area>
     </q-drawer>
 
-    <!-- Page Content -->
     <q-page-container>
       <router-view />
     </q-page-container>
@@ -249,7 +244,6 @@ export default defineComponent({
 .nav-item {
   border-radius: 8px;
   transition: all 0.2s ease;
-
   &:hover:not(.q-item--active) {
     background-color: rgba(0, 0, 0, 0.05);
   }

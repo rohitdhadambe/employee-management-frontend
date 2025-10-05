@@ -32,7 +32,6 @@ def list_employees():
 def create_employee_route():
     data = request.get_json(silent=True)
     
-    # Updated to 5 fields: name, email, phone, position, address
     required_fields = ['name', 'email', 'phone', 'position', 'address']
     
     if not data:
@@ -44,7 +43,6 @@ def create_employee_route():
             "error": f"Missing required fields: {', '.join(missing_fields)}"
         }), 400
 
-    # FIX: Pass all 5 fields to the service layer
     new_employee = create_employee(
         name=data['name'], 
         email=data['email'], 
@@ -62,7 +60,6 @@ def create_employee_route():
 def update_employee_route(employee_id):
     data = request.get_json(silent=True)
     
-    # Updated to 5 fields: name, email, phone, position, address
     required_fields = ['name', 'email', 'phone', 'position', 'address']
     
     if not data:
@@ -74,10 +71,9 @@ def update_employee_route(employee_id):
             "error": f"Missing required fields: {', '.join(missing_fields)}"
         }), 400
 
-    # FIX: Pass all 5 fields to the service layer
     updated_employee = update_employee(
-        employee_id=employee_id, 
-        name=data['name'], 
+        employee_id=employee_id,
+        name=data['name'],
         email=data['email'],
         phone=data['phone'],
         position=data['position'],

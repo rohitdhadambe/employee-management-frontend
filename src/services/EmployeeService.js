@@ -8,17 +8,17 @@ const api = axios.create({
 
 export async function fetchEmployees() {
   try {
-    const response = await api.get('');  // Changed from '/' to ''
+    const response = await api.get('');
     return response.data;
   } catch (error) {
     console.error('Error fetching employees:', error);
-    throw error; 
+    throw error;
   }
 }
 
 export async function createEmployee(employeeData) {
   try {
-    const response = await api.post('', employeeData);  // Changed from '/' to ''
+    const response = await api.post('', employeeData);
     return response.data;
   } catch (error) {
     console.error('Error creating employee:', error);

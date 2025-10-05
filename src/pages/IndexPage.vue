@@ -1,6 +1,5 @@
 <template>
   <q-page class="q-pa-md">
-    <!-- Header Section -->
     <div class="page-header q-mb-lg">
       <div>
         <h1 class="text-h5 text-weight-bold q-mb-xs">Employee Management System</h1>
@@ -17,7 +16,6 @@
       />
     </div>
 
-    <!-- Search Bar -->
     <q-card flat bordered class="q-mb-md">
       <q-card-section class="q-py-md">
         <q-input 
@@ -37,220 +35,200 @@
       </q-card-section>
     </q-card>
 
-    <!-- Employee Table -->
-  <q-card flat bordered class="employee-table-card">
-  <q-table
-    :rows="filteredEmployees"
-    :columns="columns"
-    :loading="loading"
-    :pagination="pagination"
-    @request="onTableRequest"
-    row-key="id"
-    flat
-    class="employees-table"
-  >
-    <!-- Name Column with Avatar -->
-    <template v-slot:body-cell-name="props">
-      <q-td :props="props">
-        <div class="row items-center no-wrap">
-          <q-avatar size="22px" color="primary" text-color="white" class="q-mr-sm">
-            {{ getInitials(props.row.name) }}
-          </q-avatar>
-          <span class="text-weight-medium">{{ props.row.name }}</span>
-        </div>
-      </q-td>
-    </template>
+    <q-card flat bordered class="employee-table-card">
+      <q-table
+        :rows="filteredEmployees"
+        :columns="columns"
+        :loading="loading"
+        :pagination="pagination"
+        @request="onTableRequest"
+        row-key="id"
+        flat
+        class="employees-table"
+      >
+        <template v-slot:body-cell-name="props">
+          <q-td :props="props">
+            <div class="row items-center no-wrap">
+              <q-avatar size="22px" color="primary" text-color="white" class="q-mr-sm">
+                {{ getInitials(props.row.name) }}
+              </q-avatar>
+              <span class="text-weight-medium">{{ props.row.name }}</span>
+            </div>
+          </q-td>
+        </template>
 
-    <!-- Email Column -->
-    <template v-slot:body-cell-email="props">
-      <q-td :props="props">
-        <div class="row items-center no-wrap">
-          <q-icon name="mail_outline" size="18px" class="q-mr-xs text-grey-6" />
-          <span>{{ props.row.email }}</span>
-        </div>
-      </q-td>
-    </template>
+        <template v-slot:body-cell-email="props">
+          <q-td :props="props">
+            <div class="row items-center no-wrap">
+              <q-icon name="mail_outline" size="18px" class="q-mr-xs text-grey-6" />
+              <span>{{ props.row.email }}</span>
+            </div>
+          </q-td>
+        </template>
 
-    <!-- Phone Column -->
-    <template v-slot:body-cell-phone="props">
-      <q-td :props="props">
-        <div class="row items-center no-wrap">
-          <q-icon name="phone" size="18px" class="q-mr-xs text-grey-6" />
-          <span>{{ props.row.phone || 'N/A' }}</span>
-        </div>
-      </q-td>
-    </template>
+        <template v-slot:body-cell-phone="props">
+          <q-td :props="props">
+            <div class="row items-center no-wrap">
+              <q-icon name="phone" size="18px" class="q-mr-xs text-grey-6" />
+              <span>{{ props.row.phone || 'N/A' }}</span>
+            </div>
+          </q-td>
+        </template>
 
-    <!-- Position Column -->
-    <template v-slot:body-cell-position="props">
-      <q-td :props="props">
-        <q-badge 
-          color="blue-grey-2" 
-          text-color="blue-grey-8"
-          :label="props.row.position"
-          class="q-px-md q-py-xs"
-        />
-      </q-td>
-    </template>
+        <template v-slot:body-cell-position="props">
+          <q-td :props="props">
+            <q-badge 
+              color="blue-grey-2" 
+              text-color="blue-grey-8"
+              :label="props.row.position"
+              class="q-px-md q-py-xs"
+            />
+          </q-td>
+        </template>
 
-    <!-- Address Column -->
-    <template v-slot:body-cell-address="props">
-      <q-td :props="props">
-        <div class="row items-center no-wrap">
-          <q-icon name="location_on" size="18px" class="q-mr-xs text-grey-6" />
-          <span>{{ props.row.address || 'N/A' }}</span>
-        </div>
-      </q-td>
-    </template>
+        <template v-slot:body-cell-address="props">
+          <q-td :props="props">
+            <div class="row items-center no-wrap">
+              <q-icon name="location_on" size="18px" class="q-mr-xs text-grey-6" />
+              <span>{{ props.row.address || 'N/A' }}</span>
+            </div>
+          </q-td>
+        </template>
 
-    <!-- Actions -->
-    <template v-slot:body-cell-actions="props">
-      <q-td :props="props">
-        <div class="row no-wrap q-gutter-xs">
-          <q-btn 
-            flat dense round icon="edit" color="primary" size="sm"
-            @click="openEditDialog(props.row)"
-          >
-            <q-tooltip>Edit</q-tooltip>
-          </q-btn>
-          <q-btn 
-            flat dense round icon="delete" color="negative" size="sm"
-            @click="confirmDelete(props.row)"
-          >
-            <q-tooltip>Delete</q-tooltip>
-          </q-btn>
-        </div>
-      </q-td>
-    </template>
+        <template v-slot:body-cell-actions="props">
+          <q-td :props="props">
+            <div class="row no-wrap q-gutter-xs">
+              <q-btn 
+                flat dense round icon="edit" color="primary" size="sm"
+                @click="openEditDialog(props.row)"
+              >
+                <q-tooltip>Edit</q-tooltip>
+              </q-btn>
+              <q-btn 
+                flat dense round icon="delete" color="negative" size="sm"
+                @click="confirmDelete(props.row)"
+              >
+                <q-tooltip>Delete</q-tooltip>
+              </q-btn>
+            </div>
+          </q-td>
+        </template>
 
-    <!-- Loading -->
-    <template v-slot:loading>
-      <q-inner-loading showing color="primary" />
-    </template>
+        <template v-slot:loading>
+          <q-inner-loading showing color="primary" />
+        </template>
 
-    <!-- No Data -->
-    <template v-slot:no-data>
-      <div class="full-width column items-center q-py-xl">
-        <q-icon name="group_off" size="64px" color="grey-5" class="q-mb-md" />
-        <p class="text-h6 text-grey-7">No employees found</p>
-        <p class="text-body2 text-grey-6">
-          {{ searchQuery ? 'Try adjusting your search criteria' : 'Get started by adding your first employee' }}
-        </p>
-      </div>
-    </template>
-  </q-table>
-</q-card>
+        <template v-slot:no-data>
+          <div class="full-width column items-center q-py-xl">
+            <q-icon name="group_off" size="64px" color="grey-5" class="q-mb-md" />
+            <p class="text-h6 text-grey-7">No employees found</p>
+            <p class="text-body2 text-grey-6">
+              {{ searchQuery ? 'Try adjusting your search criteria' : 'Get started by adding your first employee' }}
+            </p>
+          </div>
+        </template>
+      </q-table>
+    </q-card>
 
+    <q-dialog v-model="dialogOpen" persistent>
+      <q-card style="min-width: 500px; max-width: 90vw; border-radius: 10px;">
+        <q-card-section class="row items-center q-pb-sm q-pt-md">
+          <div class="text-h6 text-primary">
+            {{ isEditMode ? 'Edit Employee' : 'Add New Employee' }}
+          </div>
+          <q-space />
+          <q-btn icon="close" flat round dense v-close-popup class="text-grey-7" />
+        </q-card-section>
 
-    <!-- Add/Edit Dialog -->
-   <q-dialog v-model="dialogOpen" persistent>
-<q-card style="min-width: 500px; max-width: 90vw; border-radius: 10px;">
-    <!-- Header -->
-    <q-card-section class="row items-center q-pb-sm q-pt-md">
-      <div class="text-h6 text-primary">
-        {{ isEditMode ? 'Edit Employee' : 'Add New Employee' }}
-      </div>
-      <q-space />
-      <q-btn icon="close" flat round dense v-close-popup class="text-grey-7" />
-    </q-card-section>
+        <q-separator />
 
-    <q-separator />
+        <q-form @submit="handleSaveEmployee" class="q-pa-lg">
+          <div class="q-gutter-md">
+            <q-input 
+              v-model="form.name" 
+              label="Full Name" 
+              outlined 
+              dense 
+              :rules="[val => !!val || 'Name is required']"
+            >
+              <template v-slot:prepend>
+                <q-icon name="person" />
+              </template>
+            </q-input>
 
-    <!-- Form -->
-    <q-form @submit="handleSaveEmployee" class="q-pa-lg">
-      <div class="q-gutter-md">
-        <!-- Full Name -->
-        <q-input 
-          v-model="form.name" 
-          label="Full Name" 
-          outlined 
-          dense 
-          :rules="[val => !!val || 'Name is required']"
-        >
-          <template v-slot:prepend>
-            <q-icon name="person" />
-          </template>
-        </q-input>
+            <q-input 
+              v-model="form.email" 
+              label="Email Address" 
+              type="email" 
+              outlined 
+              dense
+              :rules="[
+                val => !!val || 'Email is required',
+                val => /.+@.+\..+/.test(val) || 'Invalid email format'
+              ]"
+            >
+              <template v-slot:prepend>
+                <q-icon name="mail" />
+              </template>
+            </q-input>
 
-        <!-- Email -->
-        <q-input 
-          v-model="form.email" 
-          label="Email Address" 
-          type="email" 
-          outlined 
-          dense
-          :rules="[
-            val => !!val || 'Email is required',
-            val => /.+@.+\..+/.test(val) || 'Invalid email format'
-          ]"
-        >
-          <template v-slot:prepend>
-            <q-icon name="mail" />
-          </template>
-        </q-input>
+            <q-input 
+              v-model="form.phone" 
+              label="Phone Number" 
+              outlined 
+              dense
+              :rules="[val => !!val || 'Phone number is required']"
+            >
+              <template v-slot:prepend>
+                <q-icon name="phone" />
+              </template>
+            </q-input>
 
-        <!-- Phone Number -->
-        <q-input 
-          v-model="form.phone" 
-          label="Phone Number" 
-          outlined 
-          dense
-          :rules="[val => !!val || 'Phone number is required']"
-        >
-          <template v-slot:prepend>
-            <q-icon name="phone" />
-          </template>
-        </q-input>
+            <q-input 
+              v-model="form.position" 
+              label="Position" 
+              outlined 
+              dense
+              :rules="[val => !!val || 'Position is required']"
+            >
+              <template v-slot:prepend>
+                <q-icon name="work" />
+              </template>
+            </q-input>
 
-        <!-- Position -->
-        <q-input 
-          v-model="form.position" 
-          label="Position" 
-          outlined 
-          dense
-          :rules="[val => !!val || 'Position is required']"
-        >
-          <template v-slot:prepend>
-            <q-icon name="work" />
-          </template>
-        </q-input>
+            <q-input 
+              v-model="form.address" 
+              label="Address" 
+              outlined 
+              dense
+              :rules="[val => !!val || 'Address is required']"
+            >
+              <template v-slot:prepend>
+                <q-icon name="location_on" />
+              </template>
+            </q-input>
+          </div>
 
-        <!-- Address -->
-        <q-input 
-          v-model="form.address" 
-          label="Address" 
-          outlined 
-          dense
-          :rules="[val => !!val || 'Address is required']"
-        >
-          <template v-slot:prepend>
-            <q-icon name="location_on" />
-          </template>
-        </q-input>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="row justify-end q-gutter-sm q-mt-xl">
-        <q-btn 
-          flat 
-          label="Cancel" 
-          color="grey-7" 
-          v-close-popup 
-          class="q-px-md"
-        />
-        <q-btn 
-          unelevated 
-          type="submit" 
-          :label="isEditMode ? 'Update' : 'Create'" 
-          color="primary"
-          :loading="saving" 
-          class="q-px-md"
-        />
-      </div>
-    </q-form>
-  </q-card>
-</q-dialog>
-
+          <div class="row justify-end q-gutter-sm q-mt-xl">
+            <q-btn 
+              flat 
+              label="Cancel" 
+              color="grey-7" 
+              v-close-popup 
+              class="q-px-md"
+            />
+            <q-btn 
+              unelevated 
+              type="submit" 
+              :label="isEditMode ? 'Update' : 'Create'" 
+              color="primary"
+              :loading="saving" 
+              class="q-px-md"
+            />
+          </div>
+        </q-form>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -267,7 +245,6 @@ import {
 
 const $q = useQuasar();
 
-// Types
 interface Employee {
   id: number | null;
   name: string;
@@ -285,7 +262,6 @@ interface ApiErrorResponse {
   };
 }
 
-// Type guard to check if error is an API error
 function isApiError(error: unknown): error is ApiErrorResponse {
   return (
     typeof error === 'object' &&
@@ -294,7 +270,6 @@ function isApiError(error: unknown): error is ApiErrorResponse {
   );
 }
 
-// State
 const employees = ref<Employee[]>([]);
 const loading = ref(false);
 const saving = ref(false);
@@ -311,58 +286,14 @@ const form = ref<Employee>({
   address: '',
 });
 
-// Table Configuration
 const columns: QTableColumn[] = [
-  { 
-    name: 'id', 
-    label: 'ID', 
-    field: 'id', 
-    align: 'left' as const,
-    sortable: true,
-    style: 'width: 80px'
-  },
-  { 
-    name: 'name', 
-    label: 'Name', 
-    field: 'name', 
-    align: 'left' as const,
-    sortable: true
-  },
-  { 
-    name: 'email', 
-    label: 'Email', 
-    field: 'email', 
-    align: 'left' as const,
-    sortable: true
-  },
-  { 
-    name: 'phone', 
-    label: 'Phone', 
-    field: 'phone', 
-    align: 'left' as const,
-    sortable: true
-  },
-  { 
-    name: 'position', 
-    label: 'Position', 
-    field: 'position', 
-    align: 'left' as const,
-    sortable: true
-  },
-  { 
-    name: 'address', 
-    label: 'Address (Place)', 
-    field: 'address', 
-    align: 'left' as const,
-    sortable: true
-  },
-  { 
-    name: 'actions', 
-    label: 'Actions', 
-    field: 'actions', 
-    align: 'left' as const,
-    style: 'width: 120px'
-  },
+  { name: 'id', label: 'ID', field: 'id', align: 'left' as const, sortable: true, style: 'width: 80px' },
+  { name: 'name', label: 'Name', field: 'name', align: 'left' as const, sortable: true },
+  { name: 'email', label: 'Email', field: 'email', align: 'left' as const, sortable: true },
+  { name: 'phone', label: 'Phone', field: 'phone', align: 'left' as const, sortable: true },
+  { name: 'position', label: 'Position', field: 'position', align: 'left' as const, sortable: true },
+  { name: 'address', label: 'Address (Place)', field: 'address', align: 'left' as const, sortable: true },
+  { name: 'actions', label: 'Actions', field: 'actions', align: 'left' as const, style: 'width: 120px' },
 ];
 
 const pagination = ref({
@@ -373,10 +304,8 @@ const pagination = ref({
   rowsNumber: 0
 });
 
-// Computed
 const filteredEmployees = computed(() => {
   if (!searchQuery.value) return employees.value;
-  
   const query = searchQuery.value.toLowerCase();
   return employees.value.filter(emp => 
     emp.name?.toLowerCase().includes(query) ||
@@ -387,7 +316,6 @@ const filteredEmployees = computed(() => {
   );
 });
 
-// Methods
 function getInitials(name: string): string {
   return name
     .split(' ')
@@ -437,35 +365,20 @@ async function saveEmployee(): Promise<void> {
       position: form.value.position,
       address: form.value.address,
     };
-
     if (isEditMode.value) {
       await updateEmployee(form.value.id, data);
-      $q.notify({
-        type: 'positive',
-        message: 'Employee updated successfully',
-        position: 'top'
-      });
+      $q.notify({ type: 'positive', message: 'Employee updated successfully', position: 'top' });
     } else {
       await createEmployee(data);
-      $q.notify({
-        type: 'positive',
-        message: 'Employee created successfully',
-        position: 'top'
-      });
+      $q.notify({ type: 'positive', message: 'Employee created successfully', position: 'top' });
     }
-    
     await loadEmployees();
     dialogOpen.value = false;
   } catch (error: unknown) {
     const errorMessage = isApiError(error) 
       ? error.response?.data?.error || 'Operation failed'
       : 'Operation failed';
-    
-    $q.notify({
-      type: 'negative',
-      message: errorMessage,
-      position: 'top'
-    });
+    $q.notify({ type: 'negative', message: errorMessage, position: 'top' });
   } finally {
     saving.value = false;
   }
@@ -503,27 +416,15 @@ async function executeDelete(employee: Employee): Promise<void> {
     const errorMessage = isApiError(error)
       ? error.response?.data?.error || 'Deletion failed'
       : 'Deletion failed';
-    
-    $q.notify({
-      type: 'negative',
-      message: errorMessage,
-      position: 'top'
-    });
+    $q.notify({ type: 'negative', message: errorMessage, position: 'top' });
   }
 }
 
 function onTableRequest(props: Parameters<NonNullable<QTableProps['onRequest']>>[0]): void {
   const { sortBy, descending, page, rowsPerPage, rowsNumber } = props.pagination;
-  pagination.value = {
-    sortBy,
-    descending,
-    page,
-    rowsPerPage,
-    rowsNumber: rowsNumber ?? 0
-  };
+  pagination.value = { sortBy, descending, page, rowsPerPage, rowsNumber: rowsNumber ?? 0 };
 }
 
-// Lifecycle
 onMounted(() => {
   loadEmployees().catch(err => console.error(err));
 });
@@ -554,9 +455,11 @@ onMounted(() => {
   :deep(.q-table__card) {
     box-shadow: none;
   }
+
   .employee-table-card {
-  border-radius: 10px;
-  overflow: hidden; /* Ensures rounded corners apply to the inner table */
+    border-radius: 10px;
+    overflow: hidden;
+  }
 }
-}
+
 </style>

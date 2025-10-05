@@ -3,7 +3,7 @@ import os
 import sqlite3
 import json
 
-from app import app 
+from app import app
 from db_service import create_employee, get_db_connection, DATABASE_NAME, clear_employees 
 
 TEST_DATABASE_NAME = 'test_employee_data.db'
@@ -80,7 +80,7 @@ def test_1_create_and_read_employee(client):
         'address': 'Test Address A'
     }
     response = client.post('/api/employees', json=new_employee_data)
-    assert response.status_code == 201 
+    assert response.status_code == 201
     
     response_get = client.get('/api/employees')
     assert response_get.status_code == 200
@@ -91,7 +91,7 @@ def test_1_create_and_read_employee(client):
 
 
 def test_2_update_employee_success(client, employee_id_to_test):
-    emp_id = employee_id_to_test 
+    emp_id = employee_id_to_test
     
     update_data = {
         'name': 'Updated Test User',
@@ -101,7 +101,7 @@ def test_2_update_employee_success(client, employee_id_to_test):
         'address': 'Updated Test Address'
     }
     response = client.put(f'/api/employees/{emp_id}', json=update_data)
-    assert response.status_code == 200 
+    assert response.status_code == 200
     
     response_get_all = client.get('/api/employees')
     employees = response_get_all.get_json()
@@ -114,7 +114,7 @@ def test_2_update_employee_success(client, employee_id_to_test):
 
 
 def test_3_delete_employee_success(client, employee_id_to_test):
-    emp_id = employee_id_to_test 
+    emp_id = employee_id_to_test
     
     response = client.delete(f'/api/employees/{emp_id}')
     assert response.status_code == 200
@@ -137,8 +137,8 @@ def test_4_invalid_create_and_conflict(client):
     assert response_bad.status_code == 400
 
     valid_data = {
-        'name': 'Dupe User', 
-        'email': 'dupe@verto.com', 
+        'name': 'Dupe User',
+        'email': 'dupe@verto.com',
         'phone': '5555555555',
         'position': 'Dev',
         'address': 'Dupe Address'
